@@ -11,7 +11,7 @@ ARG GOSU_VERSION=1.10
 
 # Install additional package
 RUN echo "@community http://dl-cdn.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories && \ 
-    apk add --no-cache bash bzip2 curl shadow@community
+    apk add --no-cache bash curl py2-pip shadow@community
 
 # Create users
 ENV GENERAL_USER=user
@@ -19,8 +19,7 @@ RUN useradd -mU -d /home/${GENERAL_USER} ${GENERAL_USER} && passwd -d ${GENERAL_
 WORKDIR /home/${GENERAL_USER}
 
 # Install cqlsh
-RUN apk add --no-cache py2-pip
-RUN pip install --no-cache-dir --upgrade --upgrade-strategy=only-if-needed cqlsh
+RUN pip install -q --no-cache-dir --upgrade --upgrade-strategy=only-if-needed cqlsh
 
 ADD ./cqlshrc /usr/local/
 RUN mkdir -p /home/${GENERAL_USER}/.cassandra && \
